@@ -3,6 +3,7 @@ const test_data=require('../db/data/test-data/index')
 const seed=require('../db/seeds/seed')
 const app=require('../app')
 const db=require('../db/connection')
+const endpointsList=require('../controllers/api-directory/APIOBJECT')
 
 beforeEach(()=>{
     return seed(test_data)
@@ -30,6 +31,28 @@ describe('GET /api/topics',()=>{
                     slug:expect.any(String),
                     description:expect.any(String)
                 }))
+            })
+    })
+})
+
+describe('GET /api',()=>{
+    test('returns a list of valid endpoints',()=>{
+        return request(app)
+            .get('/api')
+            .expect(200)
+            .then(({body})=>{
+                expect(body).toEqual({'Valid endpoints':endpointsList})
+            })
+    })
+})
+
+describe('invalid GET endpoint',()=>{
+    test('informs the user to GET /api for a list of valid endpoints',()=>{
+        return request(app)
+            .get('/pizza')
+            .expect(404)
+            .then(({body})=>{
+                expect(body).toEqual({msg:'For a list of valid endpoints, try GET /api'})
             })
     })
 })
@@ -68,4 +91,3 @@ describe('GET /api/articles/:article_id',()=>{
             expect(body.msg).toBe('Bad request.')
         })
     })
-})
