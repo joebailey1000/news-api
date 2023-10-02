@@ -172,7 +172,7 @@ describe('GET /api/articles/:article_id/comments',()=>{
     })
 })
 
-describe.only('POST /api/articles/:article_id/comments',()=>{
+describe('POST /api/articles/:article_id/comments',()=>{
     const comment={
         username:'lurker',
         body:'FOO BAR'
@@ -211,5 +211,37 @@ describe.only('POST /api/articles/:article_id/comments',()=>{
                 expect(body.msg).toBe('Bad request.')
             })
     })
-    
+    test('sends a 400 if either the author or body are missing or empty',()=>{
+        return request(app)
+            .post('/api/articles/2/comments')
+            .send({username:'',comment:''})
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            }).then(()=>{
+                return request(app)
+            .post('/api/articles/2/comments')
+            .send({})
+            .expect(400)
+            })
+    })
+    test('ignores extra properties sent in the post',()=>{
+        return request(app)
+            .post('/api/articles/2/comments')
+            .send({
+                isExtraProperty:true,
+                ...comment
+            })
+            .expect(201)
+            .then(({body})=>{
+                expect(body.comment).toMatchObject({
+                    comment_id:expect.any(Number),
+                    votes:expect.any(Number),
+                    created_at:expect.any(String),
+                    author:'lurker',
+                    body:'FOO BAR',
+                    article_id:2
+                })
+            })
+    })
 })
