@@ -26,8 +26,10 @@ describe('GET /api/topics',()=>{
             .get('/api/topics')
             .expect(200)
             .then(({body})=>{
-                expect(body.topics[0].slug).toBeDefined()
-                expect(body.topics[0].description).toBeDefined()
+                expect(body.topics).toMatchObject(Array(3).fill({
+                    slug:expect.any(String),
+                    description:expect.any(String)
+                }))
             })
     })
 })
