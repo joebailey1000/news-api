@@ -58,5 +58,7 @@ exports.patchArticle=(req,res,next)=>{
     return voteOnArticle(req.body,req.params)
         .then(article=>{
             res.status(200).send({article})
+        }).catch(err=>{
+            next(err)
         })
 }
