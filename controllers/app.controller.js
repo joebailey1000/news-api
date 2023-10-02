@@ -18,4 +18,7 @@ exports.getApi=(req,res,next)=>{
 
 exports.getAllArticles=(req,res,next)=>{
     return fetchAllArticles()
+        .then((articles)=>{
+            res.status(200).send({articles})
+        })
 }

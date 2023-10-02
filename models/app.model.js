@@ -8,11 +8,16 @@ exports.fetchAllTopics=()=>{
 }
 
 exports.fetchAllArticles=()=>{
-    return db.query(`SELECT articles.article_id,title,topic,article.author,body,
-        created_at,votes,article_img_url, COUNT(comment_id) as comment_count FROM articles
+    return db.query(`SELECT articles.article_id,title,topic,articles.author,articles.body,
+        articles.created_at,articles.votes,article_img_url, COUNT(comment_id) AS comment_count FROM articles
         LEFT OUTER JOIN comments ON articles.article_id=comments.article_id
-        GROUP BY articles.article_id`)
+        GROUP BY articles.article_id
+        ORDER BY created_at DESC`)
         .then(({rows})=>{
-            console.log(rows)
+            rows.forEach(row=>{
+                delete row.body
+                row.comment_count=Number(row.comment_count)
+            })
+            return rows
         })
 }
