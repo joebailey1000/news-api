@@ -93,7 +93,7 @@ describe('GET /api/articles/:article_id',()=>{
     })
 })
 
-describe.only('GET /api/articles/:article_id/comments',()=>{
+describe('GET /api/articles/:article_id/comments',()=>{
     test('recovers the comments on a given article',()=>{
         return request(app)
             .get('/api/articles/1/comments')
