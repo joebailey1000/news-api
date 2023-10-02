@@ -1,5 +1,6 @@
 const {
-    fetchAllTopics
+    fetchAllTopics,
+    fetchAllArticles
 }=require('../models/app.model')
 
 const endpointsList=require('./api-directory/APIOBJECT')
@@ -13,4 +14,8 @@ exports.getTopics=(req,res,next)=>{
 
 exports.getApi=(req,res,next)=>{
     res.status(200).send({'Valid endpoints':endpointsList})
+}
+
+exports.getAllArticles=(req,res,next)=>{
+    return fetchAllArticles()
 }
