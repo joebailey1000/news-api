@@ -84,6 +84,13 @@ describe('GET /api/articles',()=>{
                 }))
             })
     })
+    test('served articles should be sorted with most recent first',()=>{
+        return request(app)
+            .get('/api/articles')
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy('created_at',{descending:true})
+            })
+    })
     //fixed endpoint so no further errors to be considered
 })
 
