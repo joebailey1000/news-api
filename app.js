@@ -4,7 +4,8 @@ const {
     getTopics,
     getAllArticles,
     getArticleById,
-    getApi
+    getApi,
+    getCommentsByArticle
 }=require('./controllers/app.controller')
 
 app.get('/api/healthcheck',(req,res,next)=>{
@@ -18,6 +19,8 @@ app.get('/api',getApi)
 app.get('/api/articles',getAllArticles)
 
 app.get('/api/articles/:article_id',getArticleById)
+
+app.get('/api/articles/:article_id/comments',getCommentsByArticle)
 
 app.get('*',(req,res)=>{
     res.status(404).send({msg:'For a list of valid endpoints, try GET /api'})
