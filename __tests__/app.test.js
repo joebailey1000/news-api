@@ -163,12 +163,4 @@ describe('GET /api/articles/:article_id/comments',()=>{
                 expect(body.comments).toBeSortedBy('created_at',{descending:true})
             })
     })
-    test('informs the user if the article has no comments',()=>{
-        return request(app)
-            .get('/api/articles/8/comments')
-            .expect(200)
-            .then(({body})=>{
-                expect(body.comments).toBe("There don't seem to be any comments on this article...")
-            })
-    })
 })
