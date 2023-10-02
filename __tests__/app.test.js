@@ -84,4 +84,5 @@ describe('GET /api/articles',()=>{
                 }))
             })
     })
+    //fixed endpoint so no further errors to be considered
 })
