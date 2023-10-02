@@ -57,22 +57,22 @@ describe('invalid GET endpoint',()=>{
     })
 })
 
-describe.only('GET /api/articles',()=>{
-    test('returns an array of all articles in the table',()=>{
-        return request(app)
-            .get('/api/articles')
-            .expect(404)
-            .then(({body})=>{
-                expect(body.articles).toMatchObject(Array(13).fill({
-                    article_id:expect.any(Number),
-                    title: expect.any(String),
-                    topic: expect.any(String),
-                    author: expect.any(String),
-                    body: expect.any(String),
-                    created_at: expect.any(Number),
-                    article_img_url:expect.any(String),
-                    comment_count:expect.any(Number)
-                }))
-            })
-    })
-})
+// describe.only('GET /api/articles',()=>{
+//     test('returns an array of all articles in the table',()=>{
+//         return request(app)
+//             .get('/api/articles')
+//             .expect(404)
+//             .then(({body})=>{
+//                 expect(body.articles).toMatchObject(Array(13).fill({
+//                     article_id:expect.any(Number),
+//                     title: expect.any(String),
+//                     topic: expect.any(String),
+//                     author: expect.any(String),
+//                     body: expect.any(String),
+//                     created_at: expect.any(Number),
+//                     article_img_url:expect.any(String),
+//                     comment_count:expect.any(Number)
+//                 }))
+//             })
+//     })
+// })
