@@ -5,8 +5,11 @@ const {
     getAllArticles,
     getArticleById,
     getApi,
-    getCommentsByArticle
+    getCommentsByArticle,
+    postComment
 }=require('./controllers/app.controller')
+
+app.use(express.json())
 
 app.get('/api/healthcheck',(req,res,next)=>{
     res.sendStatus(200)
@@ -25,6 +28,10 @@ app.get('/api/articles/:article_id/comments',getCommentsByArticle)
 app.get('*',(req,res)=>{
     res.status(404).send({msg:'For a list of valid endpoints, try GET /api'})
 })
+
+
+app.post('/api/articles/:article_id/comments',postComment)
+
 
 app.use((err,req,res,next)=>{
     switch(err.code){

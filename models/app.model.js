@@ -38,3 +38,21 @@ exports.fetchCommentsByArticle=({article_id})=>{
                 ORDER BY created_at DESC`,[article_id])
         }).then(({rows})=>rows)
 }
+
+exports.addCommentToDatabase=({username,body},{article_id})=>{
+    return exports.fetchArticleById({article_id})
+        .then(()=>{
+            return db.query(`INSERT INTO comments
+                (votes,author,body,article_id)
+                VALUES
+                ($1,$2,$3,$4)
+                RETURNING *`,[
+                    0,
+                    username,
+                    body,
+                    article_id
+                ])
+        }).then(({rows})=>{
+            return rows[0]
+        })
+}

@@ -171,3 +171,45 @@ describe('GET /api/articles/:article_id/comments',()=>{
             })
     })
 })
+
+describe.only('POST /api/articles/:article_id/comments',()=>{
+    const comment={
+        username:'lurker',
+        body:'FOO BAR'
+    }
+    test('successfully posts a comment to the databse',()=>{
+        return request(app)
+            .post('/api/articles/2/comments')
+            .send(comment)
+            .expect(201)
+            .then(({body})=>{
+                expect(body.comment).toMatchObject({
+                    comment_id:expect.any(Number),
+                    votes:expect.any(Number),
+                    created_at:expect.any(String),
+                    author:'lurker',
+                    body:'FOO BAR',
+                    article_id:2
+                })
+            })
+    })
+    test('returns 404 if no such article exists',()=>{
+        return request(app)
+            .post('/api/articles/1984/comments')
+            .send(comment)
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe('Not found.')
+            })
+    })
+    test('sends a 400 if the article_id is not a number',()=>{
+        return request(app)
+            .post('/api/articles/pizza/comments')
+            .send(comment)
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
+    })
+    
+})
