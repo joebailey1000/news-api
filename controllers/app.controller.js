@@ -2,7 +2,8 @@ const {
     fetchAllTopics,
     fetchCommentsByArticle,
     fetchAllArticles,
-    fetchArticleById
+    fetchArticleById,
+    addCommentToDatabase
 }=require('../models/app.model')
 
 const endpointsList=require('./api-directory/APIOBJECT')
@@ -38,6 +39,15 @@ exports.getCommentsByArticle=(req,res,next)=>{
     return fetchCommentsByArticle(req.params)
         .then(comments=>{
             res.status(200).send({comments})
+        }).catch(err=>{
+            next(err)
+        })
+}
+
+exports.postComment=(req,res,next)=>{
+    return addCommentToDatabase(req.body,req.params)
+        .then(comment=>{
+            res.status(201).send({comment})
         }).catch(err=>{
             next(err)
         })

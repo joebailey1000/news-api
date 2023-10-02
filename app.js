@@ -5,8 +5,11 @@ const {
     getAllArticles,
     getArticleById,
     getApi,
-    getCommentsByArticle
+    getCommentsByArticle,
+    postComment
 }=require('./controllers/app.controller')
+
+app.use(express.json())
 
 app.get('/api/healthcheck',(req,res,next)=>{
     res.sendStatus(200)
@@ -26,9 +29,15 @@ app.get('*',(req,res)=>{
     res.status(404).send({msg:'For a list of valid endpoints, try GET /api'})
 })
 
+
+app.post('/api/articles/:article_id/comments',postComment)
+
+
 app.use((err,req,res,next)=>{
     switch(err.code){
         case 404: res.status(404).send({msg:'Not found.'})
+        case '23502':
+        case '23503':
         case '22P02': res.status(400).send({msg:'Bad request.'})
         default:res.sendStatus(500)
     }
