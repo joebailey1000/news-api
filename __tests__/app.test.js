@@ -245,3 +245,17 @@ describe('POST /api/articles/:article_id/comments',()=>{
             })
     })
 })
+
+describe.only('PATCH /api/articles/:article_id',()=>{
+    test('cheanges the votecount on an article by the given increment',()=>{
+        const voteChange={inc_votes:-3}
+        
+        return request(app)
+                .patch('/api/articles/4')
+                .send(voteChange)
+                .expect(200)
+                .then(({body})=>{
+                    expect(body.article.votes).toBe(-3)
+                })
+    })
+})

@@ -56,3 +56,19 @@ exports.addCommentToDatabase=({username,body},{article_id})=>{
             return rows[0]
         })
 }
+
+exports.voteOnArticle=({inc_votes},{article_id})=>{
+    return db.query(`SELECT votes FROM articles
+        WHERE article_id=$1`,[article_id])
+        .then(({rows})=>{
+            return db.query(`UPDATE articles
+                SET votes=$1
+                WHERE article_id=$2
+                RETURNING *`,[
+                    rows[0].votes+inc_votes,
+                    article_id
+                ])
+        }).then(({rows})=>{
+            return rows[0]
+        })
+}
