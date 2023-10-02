@@ -85,10 +85,44 @@ describe('GET /api/articles/:article_id',()=>{
     })
     test('returns a 400 when article_id is not a number',()=>{
         return request(app)
-        .get('/api/articles/pizza')
-        .expect(400)
-        .then(({body})=>{
-            expect(body.msg).toBe('Bad request.')
-        })
+            .get('/api/articles/pizza')
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
+    })
+})
+
+describe.only('GET /api/articles/:article_id/comments',()=>{
+    test('recovers the comments on a given article',()=>{
+        return request(app)
+            .get('/api/articles/1/comments')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.comments).toMatchObject(Array(11).fill({
+                    comment_id:expect.any(Number),
+                    votes:expect.any(Number),
+                    created_at:expect.any(String),
+                    author:expect.any(String),
+                    body:expect.any(String),
+                    article_id:expect.any(Number)
+                }))
+            })
+    })
+    test('sends a 404 if the article does not exist are found',()=>{
+        return request(app)
+            .get('/api/articles/1984/comments')
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe('Not found.')
+            })
+    })
+    test('sends a 400 if the article_id is not a number',()=>{
+        return request(app)
+            .get('/api/articles/pizza/comments')
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
     })
 })
