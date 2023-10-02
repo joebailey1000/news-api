@@ -57,6 +57,36 @@ describe('invalid GET endpoint',()=>{
     })
 })
 
+describe('GET /api/articles',()=>{
+    test('returns an array of all articles in the table (including those with no comments)',()=>{
+        return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toMatchObject(Array(13).fill({
+                    article_id:expect.any(Number),
+                    title: expect.any(String),
+                    topic: expect.any(String),
+                    author: expect.any(String),
+                    created_at: expect.any(String),
+                    article_img_url:expect.any(String),
+                    comment_count:expect.any(Number)
+                }))
+            })
+    })
+    test('served articles should have the body removed',()=>{
+        return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).not.toMatchObject(Array(13).fill({
+                    body:expect.anything()
+                }))
+            })
+    })
+    //fixed endpoint so no further errors to be considered
+})
+
 describe('GET /api/articles/:article_id',()=>{
     test('returns a 200 and an article object with the matching id',()=>{
         return request(app)
@@ -85,10 +115,10 @@ describe('GET /api/articles/:article_id',()=>{
     })
     test('returns a 400 when article_id is not a number',()=>{
         return request(app)
-        .get('/api/articles/pizza')
-        .expect(400)
-        .then(({body})=>{
-            expect(body.msg).toBe('Bad request.')
-        })
+            .get('/api/articles/pizza')
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
     })
 })

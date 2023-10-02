@@ -1,5 +1,6 @@
 const {
     fetchAllTopics,
+    fetchAllArticles,
     fetchArticleById
 }=require('../models/app.model')
 
@@ -14,6 +15,13 @@ exports.getTopics=(req,res,next)=>{
 
 exports.getApi=(req,res,next)=>{
     res.status(200).send({'Valid endpoints':endpointsList})
+}
+
+exports.getAllArticles=(req,res,next)=>{
+    return fetchAllArticles()
+        .then((articles)=>{
+            res.status(200).send({articles})
+        })
 }
 
 exports.getArticleById=(req,res,next)=>{
