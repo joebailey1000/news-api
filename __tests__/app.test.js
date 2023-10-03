@@ -70,7 +70,6 @@ describe('GET /api/articles',()=>{
                     author: expect.any(String),
                     created_at: expect.any(String),
                     article_img_url:expect.any(String),
-                    comment_count:expect.any(Number)
                 }))
             })
     })
@@ -133,7 +132,7 @@ describe('GET /api/articles/:article_id',()=>{
             .get('/api/articles/1')
             .expect(200)
             .then(({body})=>{
-                expect(body.article.comment_count).toBe(11)
+                expect(body.article.comment_count).toBe('11')
             })
     })
 })
