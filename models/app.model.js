@@ -72,3 +72,8 @@ exports.voteOnArticle=({inc_votes},{article_id})=>{
             return rows[0]
         })
 }
+
+exports.fetchAllUsers=()=>{
+    return db.query(`SELECT username,name,avatar_url FROM users`)
+        .then(({rows})=>rows)
+}

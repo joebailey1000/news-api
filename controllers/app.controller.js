@@ -4,7 +4,8 @@ const {
     fetchAllArticles,
     fetchArticleById,
     addCommentToDatabase,
-    voteOnArticle
+    voteOnArticle,
+    fetchAllUsers
 }=require('../models/app.model')
 
 const endpointsList=require('./api-directory/APIOBJECT')
@@ -60,5 +61,12 @@ exports.patchArticle=(req,res,next)=>{
             res.status(200).send({article})
         }).catch(err=>{
             next(err)
+        })
+}
+
+exports.getAllUsers=(req,res,next)=>{
+    return fetchAllUsers()
+        .then(users=>{
+            res.status(200).send({users})
         })
 }
