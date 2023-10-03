@@ -70,7 +70,6 @@ describe('GET /api/articles',()=>{
                     author: expect.any(String),
                     created_at: expect.any(String),
                     article_img_url:expect.any(String),
-                    comment_count:expect.any(Number)
                 }))
             })
     })
@@ -156,6 +155,14 @@ describe('GET /api/articles/:article_id',()=>{
             .expect(400)
             .then(({body})=>{
                 expect(body.msg).toBe('Bad request.')
+            })
+    })
+    test('article object should have a comment count property',()=>{
+        return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.article.comment_count).toBe('11')
             })
     })
 })
