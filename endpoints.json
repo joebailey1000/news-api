@@ -52,6 +52,19 @@
       "created_at": 1586179020000
     }
   },
+  "GET /api/users":{
+    "description": "serves a list of all users in the server database",
+    "queries":[],
+    "exampleResponse":{
+      "users":[
+        {
+          "username":"shaunofthebread",
+          "name":"joey",
+          "avatar_url":"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.stickpng.com%2Fimg%2Fmemes%2Fdoge%2Fdoge-bread&psig=AOvVaw06iNVRjY3XfDLpaY6XQ1XG&ust=1696414039529000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCODAwfPQ2YEDFQAAAAAdAAAAABAT"
+        }
+      ]
+    }
+  },
   "POST /api/articles/:article_id/comments":{
     "description": "posts a comment to the server database",
     "queries": [],

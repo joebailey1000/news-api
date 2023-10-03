@@ -172,7 +172,7 @@ describe('GET /api/articles/:article_id/comments',()=>{
     })
 })
 
-describe.only('POST /api/articles/:article_id/comments',()=>{
+describe('POST /api/articles/:article_id/comments',()=>{
     const comment={
         username:'lurker',
         body:'FOO BAR'
@@ -320,7 +320,7 @@ describe('PATCH /api/articles/:article_id',()=>{
     })
 })
 
-describe.only('GET /api/users',()=>{
+describe('GET /api/users',()=>{
     test('sends a list of all users',()=>{
         return request(app)
             .get('/api/users')
