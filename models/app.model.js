@@ -7,13 +7,15 @@ exports.fetchAllTopics=()=>{
         })
 }
 
-exports.fetchAllArticles=()=>{
+exports.fetchAllArticles=({topic='%'})=>{
     return db.query(`SELECT articles.article_id,title,topic,articles.author,
         articles.created_at,articles.votes,article_img_url, COUNT(comment_id) AS comment_count FROM articles
         LEFT OUTER JOIN comments ON articles.article_id=comments.article_id
+        WHERE topic LIKE $1
         GROUP BY articles.article_id
-        ORDER BY created_at DESC`)
+        ORDER BY created_at DESC`,[topic])
         .then(({rows})=>{
+            if (!rows.length) return Promise.reject({code:404})
             rows.forEach(row=>{
                 row.comment_count=Number(row.comment_count)
             })
