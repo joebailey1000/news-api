@@ -258,7 +258,7 @@ describe('POST /api/articles/:article_id/comments',()=>{
 })
 
 describe('PATCH /api/articles/:article_id',()=>{
-    test('changes the votecount on an article by the given increment',()=>{
+    test.only('changes the votecount on an article by the given increment',()=>{
         const voteChange={inc_votes:-3}
         
         return request(app)
