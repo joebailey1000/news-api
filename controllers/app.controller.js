@@ -9,7 +9,7 @@ const {
     fetchAllUsers
 }=require('../models/app.model')
 
-const endpointsList=require('./api-directory/APIOBJECT')
+const endpointsList=require('../endpoints.json')
 
 exports.getTopics=(req,res,next)=>{
     return fetchAllTopics()
