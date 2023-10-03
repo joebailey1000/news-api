@@ -128,6 +128,14 @@ describe('GET /api/articles/:article_id',()=>{
                 expect(body.msg).toBe('Bad request.')
             })
     })
+    test('article object should have a comment count property',()=>{
+        return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.article.comment_count).toBe(11)
+            })
+    })
 })
 
 describe('GET /api/articles/:article_id/comments',()=>{
