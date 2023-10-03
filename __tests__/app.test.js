@@ -4,7 +4,6 @@ const seed=require('../db/seeds/seed')
 const app=require('../app')
 const db=require('../db/connection')
 const endpointsList=require('../endpoints.json')
-console.log(endpointsList)
 beforeEach(()=>{
     return seed(test_data)
 })
