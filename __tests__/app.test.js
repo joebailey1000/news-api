@@ -262,34 +262,34 @@ describe('PATCH /api/articles/:article_id',()=>{
         const voteChange={inc_votes:-3}
         
         return request(app)
-                .patch('/api/articles/4')
-                .send(voteChange)
-                .expect(200)
-                .then(({body})=>{
-                    expect(body.article.votes).toBe(-3)
-                })
+            .patch('/api/articles/4')
+            .send(voteChange)
+            .expect(200)
+            .then(({body})=>{
+                expect(body.article.votes).toBe(-3)
+            })
     })
     test('sends a 400 if the object is missing an inc_votes property',()=>{
         const voteChange={pizza:-3}
         
         return request(app)
-                .patch('/api/articles/4')
-                .send(voteChange)
-                .expect(400)
-                .then(({body})=>{
-                    expect(body.msg).toBe('Bad request.')
-                })
+            .patch('/api/articles/4')
+            .send(voteChange)
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
     })
     test('sends a 400 if inc_vote is not a number',()=>{
         const voteChange={inc_votes:'FOO BAR'}
         
         return request(app)
-                .patch('/api/articles/4')
-                .send(voteChange)
-                .expect(400)
-                .then(({body})=>{
-                    expect(body.msg).toBe('Bad request.')
-                })
+            .patch('/api/articles/4')
+            .send(voteChange)
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
     })
     test('ignores extra properties in vote_count',()=>{
         const voteChange={
@@ -298,25 +298,40 @@ describe('PATCH /api/articles/:article_id',()=>{
         }
         
         return request(app)
-                .patch('/api/articles/4')
-                .send(voteChange)
-                .expect(200)
+            .patch('/api/articles/4')
+            .send(voteChange)
+            .expect(200)
     })
     test('throws 404 if article is not found',()=>{
         const voteChange={inc_votes:-3}
 
         return request(app)
-                .patch('/api/articles/49283')
-                .send(voteChange)
-                .expect(404)
+            .patch('/api/articles/49283')
+            .send(voteChange)
+            .expect(404)
     })
     test('throws 400 if article_id is not a number',()=>{
         const voteChange={inc_votes:-3}
 
         return request(app)
-                .patch('/api/articles/pizza')
-                .send(voteChange)
-                .expect(400)
+            .patch('/api/articles/pizza')
+            .send(voteChange)
+            .expect(400)
+    })
+})
+
+describe('GET /api/users',()=>{
+    test('sends a list of all users',()=>{
+        return request(app)
+            .get('/api/users')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.users).toMatchObject(Array(4).fill({
+                    username:expect.any(String),
+                    name:expect.any(String),
+                    avatar_url:expect.any(String)
+                }))
+            })
     })
 })
 

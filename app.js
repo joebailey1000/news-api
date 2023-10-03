@@ -8,7 +8,8 @@ const {
     getCommentsByArticle,
     postComment,
     patchArticle,
-    deleteComment
+    deleteComment,
+    getAllUsers
 }=require('./controllers/app.controller')
 
 app.use(express.json())
@@ -26,6 +27,8 @@ app.get('/api/articles',getAllArticles)
 app.get('/api/articles/:article_id',getArticleById)
 
 app.get('/api/articles/:article_id/comments',getCommentsByArticle)
+
+app.get('/api/users',getAllUsers)
 
 app.get('*',(req,res)=>{
     res.status(404).send({msg:'For a list of valid endpoints, try GET /api'})

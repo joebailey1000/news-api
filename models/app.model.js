@@ -73,6 +73,7 @@ exports.voteOnArticle=({inc_votes},{article_id})=>{
         })
 }
 
+
 exports.removeCommentFromDatabase=({comment_id})=>{
     return db.query(`DELETE FROM comments
         WHERE comment_id=$1
@@ -80,4 +81,9 @@ exports.removeCommentFromDatabase=({comment_id})=>{
         .then(({rows})=>{
             if (!rows.length) return Promise.reject({code:404})
         })
+}
+
+exports.fetchAllUsers=()=>{
+    return db.query(`SELECT username,name,avatar_url FROM users`)
+        .then(({rows})=>rows)
 }

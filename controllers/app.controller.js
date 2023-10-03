@@ -5,7 +5,8 @@ const {
     fetchArticleById,
     addCommentToDatabase,
     voteOnArticle,
-    removeCommentFromDatabase
+    removeCommentFromDatabase,
+    fetchAllUsers
 }=require('../models/app.model')
 
 const endpointsList=require('./api-directory/APIOBJECT')
@@ -70,5 +71,12 @@ exports.deleteComment=(req,res,next)=>{
             res.sendStatus(204)
         }).catch(err=>{
             next(err)
+        })
+}
+
+exports.getAllUsers=(req,res,next)=>{
+    return fetchAllUsers()
+        .then(users=>{
+            res.status(200).send({users})
         })
 }
