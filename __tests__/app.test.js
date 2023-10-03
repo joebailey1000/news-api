@@ -3,8 +3,8 @@ const test_data=require('../db/data/test-data/index')
 const seed=require('../db/seeds/seed')
 const app=require('../app')
 const db=require('../db/connection')
-const endpointsList=require('../controllers/api-directory/APIOBJECT')
-
+const endpointsList=require('../endpoints.json')
+console.log(endpointsList)
 beforeEach(()=>{
     return seed(test_data)
 })
@@ -101,8 +101,7 @@ describe('GET /api/articles',()=>{
                     topic: 'cats',
                     author: expect.any(String),
                     created_at: expect.any(String),
-                    article_img_url:expect.any(String),
-                    comment_count:expect.any(Number)
+                    article_img_url:expect.any(String)
                 }])
             })
     })

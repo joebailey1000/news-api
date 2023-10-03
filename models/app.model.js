@@ -16,9 +16,6 @@ exports.fetchAllArticles=({topic='%'})=>{
         ORDER BY created_at DESC`,[topic])
         .then(({rows})=>{
             if (!rows.length) return Promise.reject({code:404})
-            rows.forEach(row=>{
-                row.comment_count=Number(row.comment_count)
-            })
             return rows
         })
 }
