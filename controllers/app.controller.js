@@ -4,7 +4,8 @@ const {
     fetchAllArticles,
     fetchArticleById,
     addCommentToDatabase,
-    voteOnArticle
+    voteOnArticle,
+    removeCommentFromDatabase
 }=require('../models/app.model')
 
 const endpointsList=require('./api-directory/APIOBJECT')
@@ -58,6 +59,15 @@ exports.patchArticle=(req,res,next)=>{
     return voteOnArticle(req.body,req.params)
         .then(article=>{
             res.status(200).send({article})
+        }).catch(err=>{
+            next(err)
+        })
+}
+
+exports.deleteComment=(req,res,next)=>{
+    return removeCommentFromDatabase(req.params)
+        .then(()=>{
+            res.sendStatus(204)
         }).catch(err=>{
             next(err)
         })
