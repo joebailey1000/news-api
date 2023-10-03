@@ -114,8 +114,13 @@ describe('GET /api/articles',()=>{
     })
     test('resistant to injection attacks on topic',()=>{
         return request(app)
-            .get('/api/articles?topic=cats;DROP%20table%20IF%20EXISTS%20articles;')
+            .get('/api/articles?topic=cats;DROP%20table%20IF%20EXISTS%20articles;SELECT%20*%20FROM%20comments%20WHERE%20body=cats')
             .expect(404)
+            .then(()=>{
+                return request(app)
+                    .get('/api/articles')
+                    .expect(200)
+            })
     })
 })
 
