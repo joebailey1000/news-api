@@ -172,7 +172,7 @@ describe('GET /api/articles/:article_id/comments',()=>{
     })
 })
 
-describe('POST /api/articles/:article_id/comments',()=>{
+describe.only('POST /api/articles/:article_id/comments',()=>{
     const comment={
         username:'lurker',
         body:'FOO BAR'
@@ -242,6 +242,17 @@ describe('POST /api/articles/:article_id/comments',()=>{
                     body:'FOO BAR',
                     article_id:2
                 })
+            })
+    })
+    test('returns 400 for an unregistered user',()=>{
+        return request(app)
+            .post('/api/articles/2/comments')
+            .send({
+                username:'shaunofthebread',
+                body:'FOO BAR'
+            }).expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
             })
     })
 })

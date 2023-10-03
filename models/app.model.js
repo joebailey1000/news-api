@@ -43,11 +43,10 @@ exports.addCommentToDatabase=({username,body},{article_id})=>{
     return exports.fetchArticleById({article_id})
         .then(()=>{
             return db.query(`INSERT INTO comments
-                (votes,author,body,article_id)
+                (author,body,article_id)
                 VALUES
-                ($1,$2,$3,$4)
+                ($1,$2,$3)
                 RETURNING *`,[
-                    0,
                     username,
                     body,
                     article_id
