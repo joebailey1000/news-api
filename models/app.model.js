@@ -72,3 +72,12 @@ exports.voteOnArticle=({inc_votes},{article_id})=>{
             return rows[0]
         })
 }
+
+exports.removeCommentFromDatabase=({comment_id})=>{
+    return db.query(`DELETE FROM comments
+        WHERE comment_id=$1
+        RETURNING *`,[comment_id])
+        .then(({rows})=>{
+            if (!rows.length) return Promise.reject({code:404})
+        })
+}
