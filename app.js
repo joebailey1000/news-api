@@ -6,7 +6,8 @@ const {
     getArticleById,
     getApi,
     getCommentsByArticle,
-    postComment
+    postComment,
+    patchArticle
 }=require('./controllers/app.controller')
 
 app.use(express.json())
@@ -31,6 +32,9 @@ app.get('*',(req,res)=>{
 
 
 app.post('/api/articles/:article_id/comments',postComment)
+
+
+app.patch('/api/articles/:article_id',patchArticle)
 
 
 app.use((err,req,res,next)=>{

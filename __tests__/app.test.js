@@ -256,3 +256,66 @@ describe.only('POST /api/articles/:article_id/comments',()=>{
             })
     })
 })
+
+describe('PATCH /api/articles/:article_id',()=>{
+    test('changes the votecount on an article by the given increment',()=>{
+        const voteChange={inc_votes:-3}
+        
+        return request(app)
+                .patch('/api/articles/4')
+                .send(voteChange)
+                .expect(200)
+                .then(({body})=>{
+                    expect(body.article.votes).toBe(-3)
+                })
+    })
+    test('sends a 400 if the object is missing an inc_votes property',()=>{
+        const voteChange={pizza:-3}
+        
+        return request(app)
+                .patch('/api/articles/4')
+                .send(voteChange)
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe('Bad request.')
+                })
+    })
+    test('sends a 400 if inc_vote is not a number',()=>{
+        const voteChange={inc_votes:'FOO BAR'}
+        
+        return request(app)
+                .patch('/api/articles/4')
+                .send(voteChange)
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe('Bad request.')
+                })
+    })
+    test('ignores extra properties in vote_count',()=>{
+        const voteChange={
+            inc_votes:17,
+            site:'reddit'
+        }
+        
+        return request(app)
+                .patch('/api/articles/4')
+                .send(voteChange)
+                .expect(200)
+    })
+    test('throws 404 if article is not found',()=>{
+        const voteChange={inc_votes:-3}
+
+        return request(app)
+                .patch('/api/articles/49283')
+                .send(voteChange)
+                .expect(404)
+    })
+    test('throws 400 if article_id is not a number',()=>{
+        const voteChange={inc_votes:-3}
+
+        return request(app)
+                .patch('/api/articles/pizza')
+                .send(voteChange)
+                .expect(400)
+    })
+})
