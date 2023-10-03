@@ -8,6 +8,7 @@ const {
     getCommentsByArticle,
     postComment,
     patchArticle,
+    deleteComment,
     getAllUsers
 }=require('./controllers/app.controller')
 
@@ -38,6 +39,9 @@ app.post('/api/articles/:article_id/comments',postComment)
 
 
 app.patch('/api/articles/:article_id',patchArticle)
+
+
+app.delete('/api/comments/:comment_id',deleteComment)
 
 
 app.use((err,req,res,next)=>{

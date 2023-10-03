@@ -334,3 +334,27 @@ describe('GET /api/users',()=>{
             })
     })
 })
+
+describe('DELETE /api/comments/:comment_id',()=>{
+    test('deletes a comment from the database and returns 204',()=>{
+        return request(app)
+            .delete('/api/comments/3')
+            .expect(204)
+    })
+    test('sends 404 when no comment is found',()=>{
+        return request(app)
+            .delete('/api/comments/2001')
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe('Not found.')
+            })
+    })
+    test('sends 400 when comment_id is not a number',()=>{
+        return request(app)
+            .delete('/api/comments/one%20morbillion')
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
+    })
+})
