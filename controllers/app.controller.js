@@ -23,9 +23,11 @@ exports.getApi=(req,res,next)=>{
 }
 
 exports.getAllArticles=(req,res,next)=>{
-    return fetchAllArticles()
+    return fetchAllArticles(req.query)
         .then((articles)=>{
             res.status(200).send({articles})
+        }).catch(err=>{
+            next(err)
         })
 }
 

@@ -91,7 +91,32 @@ describe('GET /api/articles',()=>{
                 expect(body.articles).toBeSortedBy('created_at',{descending:true})
             })
     })
-    //fixed endpoint so no further errors to be considered
+    test('accepts a topic query to filter by topic',()=>{
+        return request(app)
+            .get('/api/articles?topic=cats')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toMatchObject([{
+                    article_id:expect.any(Number),
+                    title: expect.any(String),
+                    topic: 'cats',
+                    author: expect.any(String),
+                    created_at: expect.any(String),
+                    article_img_url:expect.any(String),
+                    comment_count:expect.any(Number)
+                }])
+            })
+    })
+    test('returns 404 if no articles with the queried topic are found',()=>{
+        return request(app)
+            .get('/api/articles?topic=pizza')
+            .expect(404)
+    })
+    test('resistant to injection attacks on topic',()=>{
+        return request(app)
+            .get('/api/articles?topic=cats;DROP%20table%20IF%20EXISTS%20articles;')
+            .expect(404)
+    })
 })
 
 describe('GET /api/articles/:article_id',()=>{
