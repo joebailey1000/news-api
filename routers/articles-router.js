@@ -4,10 +4,14 @@ const {
     getArticleById,
     getCommentsByArticle,
     patchArticle,
-    postComment
+    postComment,
+    postArticle
 }=require('../controllers/app.controller')
 
-articlesRouter.get('/',getAllArticles)
+articlesRouter
+    .route('/')
+    .get(getAllArticles)
+    .post(postArticle)
 
 articlesRouter
     .route('/:article_id')

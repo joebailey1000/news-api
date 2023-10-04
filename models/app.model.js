@@ -105,3 +105,19 @@ exports.voteOnComment=({inc_votes},{comment_id})=>{
                 ]):Promise.reject({code:404})
         }).then(({rows})=>rows[0])
 }
+
+exports.addArticleToDatabase=({author,body,title,topic,article_img_url='https://as1.ftcdn.net/v2/jpg/02/67/50/12/1000_F_267501245_nNG8treQuYIFhUA5a1i1PtHalmxAXZ4A.jpg'})=>{
+    return db.query(`INSERT INTO articles
+        (author,body,title,topic,article_img_url)
+        VALUES
+        ($1,$2,$3,$4,$5)
+        RETURNING *`,[
+            author,
+            body,
+            title,
+            topic,
+            article_img_url
+        ]).then(({rows})=>{
+            return {...rows[0],comment_count:0}
+        })
+}

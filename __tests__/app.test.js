@@ -530,3 +530,105 @@ describe('PATCH /api/comments/:comment_id',()=>{
             .expect(400)
     })
 })
+
+describe.only('POST /api/articles',()=>{
+    test('posts an article to the database',()=>{
+        const newArticle={
+            author:'icellusedkars',
+            title:'new post',
+            body:'this is a new post',
+            topic:'cats',
+            article_img_url:'not finding a url for this :/'
+        }
+        
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(201)
+            .then(({body})=>{
+                expect(body.posted_article).toMatchObject({
+                    article_id:expect.any(Number),
+                    votes:0,
+                    created_at:expect.any(String),
+                    comment_count:0,
+                    ...newArticle
+                })
+            })
+    })
+    test('article_img_url defaults if omitted',()=>{
+        const newArticle={
+            author:'icellusedkars',
+            title:'new post',
+            body:'this is a new post',
+            topic:'cats',
+        }
+
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(201)
+            .then(({body})=>{
+                expect(body.posted_article.article_img_url).toBe('https://as1.ftcdn.net/v2/jpg/02/67/50/12/1000_F_267501245_nNG8treQuYIFhUA5a1i1PtHalmxAXZ4A.jpg')
+            })
+    })
+    test('sends a 400 if information is missing from the post',()=>{
+        const newArticle={
+            author:'icellusedkars',
+            title:'new post',
+            body:'this is a new post',
+            article_img_url:'not finding a url for this :/'
+        }
+        
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(400)
+    })
+    test('ignores extra properties in the post',()=>{
+        const newArticle={
+            author:'icellusedkars',
+            title:'new post',
+            body:'this is a new post',
+            topic:'cats',
+            article_img_url:'not finding a url for this :/',
+            is_funny:'false'
+        }
+
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(201)
+            .then(({body})=>{
+                delete newArticle.is_funny
+                expect(body.posted_article).toMatchObject(newArticle)
+            })
+    })
+    test('returns 400 for unregistered user',()=>{
+        const newArticle={
+            author:'shaunofthebread',
+            title:'new post',
+            body:'this is a new post',
+            topic:'cats',
+            article_img_url:'not finding a url for this :/',
+        }
+
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(400)
+    })
+    test('returns 400 for nonexistent topic',()=>{
+        const newArticle={
+            author:'icellusedkars',
+            title:'new post',
+            body:'this is a new post',
+            topic:'money',
+            article_img_url:'not finding a url for this :/',
+        }
+
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(400)
+    })
+})

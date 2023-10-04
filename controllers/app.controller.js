@@ -8,7 +8,8 @@ const {
     removeCommentFromDatabase,
     fetchAllUsers,
     fetchSpecificUser,
-    voteOnComment
+    voteOnComment,
+    addArticleToDatabase
 }=require('../models/app.model')
 
 const endpointsList=require('../endpoints.json')
@@ -84,5 +85,12 @@ exports.patchComment=(req,res,next)=>{
     return voteOnComment(req.body,req.params)
         .then(comment=>{
             res.status(200).send({comment})
+        }).catch(next)
+}
+
+exports.postArticle=(req,res,next)=>{
+    return addArticleToDatabase(req.body)
+        .then(posted_article=>{
+            res.status(201).send({posted_article})
         }).catch(next)
 }
