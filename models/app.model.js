@@ -63,14 +63,13 @@ exports.voteOnArticle=({inc_votes},{article_id})=>{
     return db.query(`SELECT votes FROM articles
         WHERE article_id=$1`,[article_id])
         .then(({rows})=>{
-            if (!rows.length) return Promise.reject({code:404})
-            return db.query(`UPDATE articles
+            return rows.length?db.query(`UPDATE articles
                 SET votes=$1
                 WHERE article_id=$2
                 RETURNING *`,[
                     rows[0].votes+inc_votes,
                     article_id
-                ])
+                ]):Promise.reject({code:404})
         }).then(({rows})=>rows[0])
 }
 
@@ -91,4 +90,18 @@ exports.fetchSpecificUser=({username})=>{
     return db.query(`SELECT username,name,avatar_url FROM users
         WHERE username=$1`,[username])
         .then(({rows})=>rows.length? rows[0]:Promise.reject({code:404}))
+}
+
+exports.voteOnComment=({inc_votes},{comment_id})=>{
+    return db.query(`SELECT * FROM comments
+        WHERE comment_id=$1`,[comment_id])
+        .then(({rows})=>{
+            return rows.length? db.query(`UPDATE comments
+                SET votes=$1
+                WHERE comment_id=$2
+                RETURNING *`,[
+                    rows[0].votes+inc_votes,
+                    comment_id
+                ]):Promise.reject({code:404})
+        }).then(({rows})=>rows[0])
 }

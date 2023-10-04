@@ -5,7 +5,8 @@ const {
     getApi,
     deleteComment,
     getAllUsers,
-    getUserByUsername
+    getUserByUsername,
+    patchComment
 }=require('../controllers/app.controller')
 
 apiRouter.get('/',getApi)
@@ -20,7 +21,10 @@ apiRouter.get('/users',getAllUsers)
 
 apiRouter.get('/users/:username',getUserByUsername)
 
-apiRouter.delete('/comments/:comment_id',deleteComment)
+apiRouter
+    .route('/comments/:comment_id')
+    .delete(deleteComment)
+    .patch(patchComment)
 
 apiRouter.use('/articles',articlesRouter)
 

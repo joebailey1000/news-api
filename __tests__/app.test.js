@@ -461,3 +461,72 @@ describe('generic error on parametric endpoint',()=>{
             })
     })
 })
+
+describe('PATCH /api/comments/:comment_id',()=>{
+    test('changes the votecount on a comment by the given increment',()=>{
+        const voteChange={inc_votes:-3}
+        return request(app)
+            .patch('/api/comments/2')
+            .send(voteChange)
+            .expect(200)
+            .then(({body})=>{
+                expect(body.comment).toEqual({
+                    comment_id: 2,
+                    body: 'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+                    article_id: 1,
+                    author: 'butter_bridge',
+                    votes: 11,
+                    created_at: '2020-10-31T03:03:00.000Z'
+                  })
+            })
+    })
+    test('sends a 400 if the object is missing an inc_votes property',()=>{
+        const voteChange={pizza:-3}
+        
+        return request(app)
+            .patch('/api/comments/2')
+            .send(voteChange)
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
+    })
+    test('sends a 400 if inc_vote is not a number',()=>{
+        const voteChange={inc_votes:'FOO BAR'}
+        
+        return request(app)
+            .patch('/api/comments/2')
+            .send(voteChange)
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request.')
+            })
+    })
+    test('ignores extra properties in vote_count',()=>{
+        const voteChange={
+            inc_votes:17,
+            site:'reddit'
+        }
+        
+        return request(app)
+            .patch('/api/comments/2')
+            .send(voteChange)
+            .expect(200)
+    })
+    test('throws 404 if comment is not found',()=>{
+        const voteChange={inc_votes:-3}
+
+        return request(app)
+            .patch('/api/comments/100')
+            .send(voteChange)
+            .expect(404)
+    })
+    test('throws 400 if comment_id is not a number',()=>{
+        const voteChange={inc_votes:-3}
+
+        return request(app)
+            .patch('/api/articles/pizza')
+            .send(voteChange)
+            .expect(400)
+    })
+})
