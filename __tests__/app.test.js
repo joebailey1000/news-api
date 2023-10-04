@@ -82,7 +82,7 @@ describe('GET /api/articles',()=>{
                 }))
             })
     })
-    test('served articles should be sorted with most recent first',()=>{
+    test('served articles should be sorted with most recent first by default',()=>{
         return request(app)
             .get('/api/articles')
             .then(({body})=>{
@@ -113,6 +113,42 @@ describe('GET /api/articles',()=>{
         return request(app)
             .get('/api/articles?topic=cats;DROP%20table%20IF%20EXISTS%20articles;SELECT%20*%20FROM%20comments%20WHERE%20body=cats')
             .expect(404)
+            .then(()=>{
+                return request(app)
+                    .get('/api/articles')
+                    .expect(200)
+            })
+    })
+    test('accepts a sort_by query',()=>{
+        return request(app)
+            .get('/api/articles?sort_by=title')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy('title',{descending:true})
+            })
+    })
+    test('sort_by rejects any values that are not column headers',()=>{
+        return request(app)
+            .get('/api/articles?sort_by=title;DROP%20TABLE%20IF%20EXISTS%20articles;')
+            .expect(400)
+            .then(()=>{
+                return request(app)
+                    .get('/api/articles')
+                    .expect(200)
+            })
+    })
+    test('accepts an order query (either asc or desc)',()=>{
+        return request(app)
+            .get('/api/articles?sort_by=topic&order=asc')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy('topic')
+            })
+    })
+    test('order rejects any values that are not asc or desc',()=>{
+        return request(app)
+            .get('/api/articles?order=desc;DROP%20TABLE%20IF%20EXISTS%20articles;')
+            .expect(400)
             .then(()=>{
                 return request(app)
                     .get('/api/articles')

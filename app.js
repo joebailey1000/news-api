@@ -47,6 +47,7 @@ app.delete('/api/comments/:comment_id',deleteComment)
 app.use((err,req,res,next)=>{
     switch(err.code){
         case 404: res.status(404).send({msg:'Not found.'})
+        case 400:
         case '23502':
         case '23503':
         case '22P02': res.status(400).send({msg:'Bad request.'})

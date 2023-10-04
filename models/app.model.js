@@ -7,13 +7,23 @@ exports.fetchAllTopics=()=>{
         })
 }
 
-exports.fetchAllArticles=({topic='%'})=>{
+exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc'})=>{
+    if (![
+        'article_id',
+        'title',
+        'topic',
+        'author',
+        'created_at',
+        'article_img_url'
+        ].includes(sort_by)||
+        !['asc','desc'].includes(order)
+    ) return Promise.reject({code:400})
     return db.query(`SELECT articles.article_id,title,topic,articles.author,
         articles.created_at,articles.votes,article_img_url FROM articles
         LEFT OUTER JOIN comments ON articles.article_id=comments.article_id
         WHERE topic LIKE $1
         GROUP BY articles.article_id
-        ORDER BY created_at DESC`,[topic])
+        ORDER BY ${sort_by} ${order}`,[topic])
         .then(({rows})=>{
             if (!rows.length) return Promise.reject({code:404})
             return rows
