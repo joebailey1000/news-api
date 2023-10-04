@@ -57,12 +57,12 @@ describe('invalid GET endpoint',()=>{
 })
 
 describe('GET /api/articles',()=>{
-    test('returns an array of all articles in the table (including those with no comments)',()=>{
+    test('returns an array of all articles in the table (default length 10)',()=>{
         return request(app)
             .get('/api/articles')
             .expect(200)
             .then(({body})=>{
-                expect(body.articles).toMatchObject(Array(13).fill({
+                expect(body.articles).toMatchObject(Array(10).fill({
                     article_id:expect.any(Number),
                     title: expect.any(String),
                     topic: expect.any(String),
@@ -153,6 +153,44 @@ describe('GET /api/articles',()=>{
                 return request(app)
                     .get('/api/articles')
                     .expect(200)
+            })
+    })
+    test('accepts a limit query which alters the page length',()=>{
+        return request(app)
+            .get('/api/articles?limit=5')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toHaveLength(5)
+            })
+    })
+    test('accepts a limit query which alters the page length',()=>{
+        return request(app)
+            .get('/api/articles?limit=5&sort_by=article_id&p=2&order=asc')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toMatchObject(
+                    [...Array(5)].map((obj,i)=>{return {article_id:i+6}})
+                    )
+            })
+    })
+    test('p defaults to first page',()=>{
+        return request(app)
+            .get('/api/articles?limit=5&sort_by=article_id&order=asc')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toMatchObject(
+                    [...Array(5)].map((obj,i)=>{return {article_id:i+1}})
+                    )
+            })
+    })
+    test('rejects non number entries for limit and p',()=>{
+        return request(app)
+            .get('/api/articles?limit=garlic')
+            .expect(400)
+            .then(()=>{
+                return request(app)
+                    .get('/api/articles?p=garlic')
+                    .expect(400)
             })
     })
 })

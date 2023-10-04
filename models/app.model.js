@@ -5,7 +5,7 @@ exports.fetchAllTopics=()=>{
         .then(({rows})=>rows)
 }
 
-exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc'})=>{
+exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc',limit=10,p=1})=>{
     if (![
         'article_id',
         'title',
@@ -21,7 +21,8 @@ exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc'})=>{
         LEFT OUTER JOIN comments ON articles.article_id=comments.article_id
         WHERE topic LIKE $1
         GROUP BY articles.article_id
-        ORDER BY ${sort_by} ${order}`,[topic])
+        ORDER BY ${sort_by} ${order}
+        LIMIT $2 OFFSET $3`,[topic,limit,(p-1)*limit])
         .then(({rows})=>rows.length?rows:Promise.reject({code:404}))
 }
 
