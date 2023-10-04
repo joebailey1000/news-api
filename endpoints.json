@@ -25,6 +25,28 @@
       ]
     }
   },
+  "POST /api/articles":{
+    "description": "posts an article to the server database",
+    "queries":[],
+    "examplePost":{
+      "author":"shaunofthebread",
+      "title":"new post",
+      "body":"this is a new post",
+      "topic":"cats",
+      "article_img_url":"some url"
+    },
+    "exampleResponse":{
+      "article_id":1,
+      "author":"shaunofthebread",
+      "title":"new post",
+      "body":"this is a new post",
+      "topic":"cats",
+      "article_img_url":"some url",
+      "votes":0,
+      "created_at":"2023/10/4",
+      "comment_count":0
+    }
+  },
   "GET /api/articles/:article_id":{
     "description": "serves the article with the requested id",
     "queries": [],

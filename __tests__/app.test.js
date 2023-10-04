@@ -531,7 +531,7 @@ describe('PATCH /api/comments/:comment_id',()=>{
     })
 })
 
-describe.only('POST /api/articles',()=>{
+describe('POST /api/articles',()=>{
     test('posts an article to the database',()=>{
         const newArticle={
             author:'icellusedkars',
