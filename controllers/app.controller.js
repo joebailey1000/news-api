@@ -6,7 +6,8 @@ const {
     addCommentToDatabase,
     voteOnArticle,
     removeCommentFromDatabase,
-    fetchAllUsers
+    fetchAllUsers,
+    fetchSpecificUser
 }=require('../models/app.model')
 
 const endpointsList=require('../endpoints.json')
@@ -81,4 +82,11 @@ exports.getAllUsers=(req,res,next)=>{
         .then(users=>{
             res.status(200).send({users})
         })
+}
+
+exports.getUserByUsername=(req,res,next)=>{
+    return fetchSpecificUser(req.params)
+        .then(user=>{
+            res.status(200).send({user})
+        }).catch(next)
 }

@@ -2,9 +2,7 @@ const db=require('../db/connection')
 
 exports.fetchAllTopics=()=>{
     return db.query('SELECT * FROM topics')
-        .then(({rows})=>{
-            return rows
-        })
+        .then(({rows})=>rows)
 }
 
 exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc'})=>{
@@ -24,10 +22,7 @@ exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc'})=>{
         WHERE topic LIKE $1
         GROUP BY articles.article_id
         ORDER BY ${sort_by} ${order}`,[topic])
-        .then(({rows})=>{
-            if (!rows.length) return Promise.reject({code:404})
-            return rows
-        })
+        .then(({rows})=>rows.length?rows:Promise.reject({code:404}))
 }
 
 exports.fetchArticleById=({article_id})=>{
@@ -37,10 +32,7 @@ exports.fetchArticleById=({article_id})=>{
         LEFT OUTER JOIN comments ON comments.article_id=articles.article_id
         WHERE articles.article_id=$1
         GROUP BY articles.article_id`,[article_id])
-        .then(({rows})=>{
-            if (!rows.length) return Promise.reject({code:404})
-            return rows[0]
-        })
+        .then(({rows})=>rows.length?rows[0]:Promise.reject({code:404}))
 }
 
 exports.fetchCommentsByArticle=({article_id})=>{
@@ -64,9 +56,7 @@ exports.addCommentToDatabase=({username,body},{article_id})=>{
                     body,
                     article_id
                 ])
-        }).then(({rows})=>{
-            return rows[0]
-        })
+        }).then(({rows})=>rows[0])
 }
 
 exports.voteOnArticle=({inc_votes},{article_id})=>{
@@ -81,9 +71,7 @@ exports.voteOnArticle=({inc_votes},{article_id})=>{
                     rows[0].votes+inc_votes,
                     article_id
                 ])
-        }).then(({rows})=>{
-            return rows[0]
-        })
+        }).then(({rows})=>rows[0])
 }
 
 
@@ -91,12 +79,16 @@ exports.removeCommentFromDatabase=({comment_id})=>{
     return db.query(`DELETE FROM comments
         WHERE comment_id=$1
         RETURNING *`,[comment_id])
-        .then(({rows})=>{
-            if (!rows.length) return Promise.reject({code:404})
-        })
+        .then(({rows})=>rows.length?null:Promise.reject({code:404}))
 }
 
 exports.fetchAllUsers=()=>{
     return db.query(`SELECT username,name,avatar_url FROM users`)
         .then(({rows})=>rows)
+}
+
+exports.fetchSpecificUser=({username})=>{
+    return db.query(`SELECT username,name,avatar_url FROM users
+        WHERE username=$1`,[username])
+        .then(({rows})=>rows.length? rows[0]:Promise.reject({code:404}))
 }

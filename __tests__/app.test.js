@@ -406,6 +406,27 @@ describe('GET /api/users',()=>{
     })
 })
 
+describe('GET /api/users/:username',()=>{
+    test('sends a user matching the given username',()=>{
+        return request(app)
+            .get('/api/users/butter_bridge')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.user).toEqual({
+                    username: 'butter_bridge',
+                    name: 'jonny',
+                    avatar_url:
+                      'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+                  })
+            })
+    })
+    test('returns 404 when no user matches the given name',()=>{
+        return request(app)
+            .get('/api/users/shaunofthebread')
+            .expect(404)
+    })
+})
+
 describe('DELETE /api/comments/:comment_id',()=>{
     test('deletes a comment from the database and returns 204',()=>{
         return request(app)
@@ -426,6 +447,17 @@ describe('DELETE /api/comments/:comment_id',()=>{
             .expect(400)
             .then(({body})=>{
                 expect(body.msg).toBe('Bad request.')
+            })
+    })
+})
+
+describe('generic error on parametric endpoint',()=>{
+    test('send 400 when parametric endpoint cannot be parsed due to faulty argument',()=>{
+        return request(app)
+            .get('/api/articles/%')
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe(`Could not parse argument containing '%' (incorrect URL formatting).`)
             })
     })
 })

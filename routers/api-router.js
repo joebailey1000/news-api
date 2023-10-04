@@ -4,7 +4,8 @@ const {
     getTopics,
     getApi,
     deleteComment,
-    getAllUsers
+    getAllUsers,
+    getUserByUsername
 }=require('../controllers/app.controller')
 
 apiRouter.get('/',getApi)
@@ -16,6 +17,8 @@ apiRouter.get('/healthcheck',(req,res,next)=>{
 apiRouter.get('/topics',getTopics)
 
 apiRouter.get('/users',getAllUsers)
+
+apiRouter.get('/users/:username',getUserByUsername)
 
 apiRouter.delete('/comments/:comment_id',deleteComment)
 
