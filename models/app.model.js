@@ -123,3 +123,13 @@ exports.addArticleToDatabase=({author,body,title,topic,article_img_url='https://
             return {...rows[0],comment_count:0}
         })
 }
+
+exports.addTopicToDatabase=({slug,description})=>{
+    return !slug||!description? Promise.reject({code:400})
+        :db.query(`INSERT INTO topics
+        (slug,description)
+        VALUES
+        ($1,$2)
+        RETURNING *`,[slug,description])
+        .then(({rows})=>rows[0])
+}

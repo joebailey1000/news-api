@@ -9,7 +9,8 @@ const {
     fetchAllUsers,
     fetchSpecificUser,
     voteOnComment,
-    addArticleToDatabase
+    addArticleToDatabase,
+    addTopicToDatabase
 }=require('../models/app.model')
 
 const endpointsList=require('../endpoints.json')
@@ -92,5 +93,12 @@ exports.postArticle=(req,res,next)=>{
     return addArticleToDatabase(req.body)
         .then(posted_article=>{
             res.status(201).send({posted_article})
+        }).catch(next)
+}
+
+exports.postTopic=(req,res,next)=>{
+    return addTopicToDatabase(req.body)
+        .then(posted_topic=>{
+            res.status(201).send({posted_topic})
         }).catch(next)
 }

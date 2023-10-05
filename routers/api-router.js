@@ -6,7 +6,8 @@ const {
     deleteComment,
     getAllUsers,
     getUserByUsername,
-    patchComment
+    patchComment,
+    postTopic
 }=require('../controllers/app.controller')
 
 apiRouter.get('/',getApi)
@@ -15,7 +16,9 @@ apiRouter.get('/healthcheck',(req,res,next)=>{
     res.sendStatus(200)
 })
 
-apiRouter.get('/topics',getTopics)
+apiRouter.route('/topics')
+    .get(getTopics)
+    .post(postTopic)
 
 apiRouter.get('/users',getAllUsers)
 

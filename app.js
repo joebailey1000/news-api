@@ -17,7 +17,8 @@ app.use((err,req,res,next)=>{
         case 400:
         case '23502':
         case '23503':
-        case '22P02': res.status(400).send({msg:'Bad request.'})
+        case '22P02':
+        case '08P01': res.status(400).send({msg:'Bad request.'})
         default:res.sendStatus(500)
     }
 })

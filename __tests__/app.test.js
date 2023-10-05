@@ -716,3 +716,68 @@ describe('POST /api/articles',()=>{
             .expect(400)
     })
 })
+
+describe.only('POST /api/topics',()=>{
+    test('posts a topic to the database',()=>{
+        const topic={
+            slug:"topic name",
+            description:"topic description"
+        }
+        
+        return request(app)
+            .post('/api/topics')
+            .send(topic)
+            .expect(201)
+            .then(({body})=>{
+                expect(body.posted_topic).toEqual(topic)
+            })
+    })
+    test('rejects if topic is missing keys',()=>{
+        const topic={
+            slug:"topic name"
+        }
+        
+        return request(app)
+            .post('/api/topics')
+            .send(topic)
+            .expect(400)
+    })
+    test('ignores extra keys in the posted topic',()=>{
+        const topic={
+            slug:"topic name",
+            description:"topic description",
+            extra_key:"extra key"
+        }
+        
+        return request(app)
+            .post('/api/topics')
+            .send(topic)
+            .expect(201)
+            .then(({body})=>{
+                expect(body.posted_topic).toEqual({
+                    slug:"topic name",
+                    description:"topic description"
+                })
+            })
+    })
+    test('rejects object if either slug or description is empty',()=>{
+        const topic={
+            slug:"",
+            description:''
+        }
+        const topic2={
+            slug:"",
+            description:'topic description'
+        }
+        
+        return request(app)
+            .post('/api/topics')
+            .send(topic)
+            .expect(400)
+            .then(()=>{
+                return request(app).post('/api/topics')
+                    .send(topic2)
+                    .expect(400)
+            })
+    })
+})
