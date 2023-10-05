@@ -717,7 +717,7 @@ describe('POST /api/articles',()=>{
     })
 })
 
-describe.only('POST /api/topics',()=>{
+describe('POST /api/topics',()=>{
     test('posts a topic to the database',()=>{
         const topic={
             slug:"topic name",
