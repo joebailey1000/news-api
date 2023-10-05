@@ -782,7 +782,7 @@ describe('POST /api/topics',()=>{
     })
 })
 
-describe.only('DELETE /api/articles/:article_id',()=>{
+describe('DELETE /api/articles/:article_id',()=>{
     test('deletes an article from the database',()=>{
         return request(app)
             .delete('/api/articles/1')
