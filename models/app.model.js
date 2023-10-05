@@ -36,12 +36,13 @@ exports.fetchArticleById=({article_id})=>{
         .then(({rows})=>rows.length?rows[0]:Promise.reject({code:404}))
 }
 
-exports.fetchCommentsByArticle=({article_id})=>{
+exports.fetchCommentsByArticle=({article_id},{limit=10,p=1})=>{
     return exports.fetchArticleById({article_id})
         .then(()=>{
             return db.query(`SELECT * FROM comments
                 WHERE article_id=$1
-                ORDER BY created_at DESC`,[article_id])
+                ORDER BY created_at DESC
+                LIMIT $2 OFFSET $3`,[article_id,limit,(p-1)*limit])
         }).then(({rows})=>rows)
 }
 

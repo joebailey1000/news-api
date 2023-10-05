@@ -40,7 +40,7 @@ exports.getArticleById=(req,res,next)=>{
 }
 
 exports.getCommentsByArticle=(req,res,next)=>{
-    return fetchCommentsByArticle(req.params)
+    return fetchCommentsByArticle(req.params,req.query)
         .then(comments=>{
             res.status(200).send({comments})
         }).catch(next)

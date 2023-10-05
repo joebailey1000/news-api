@@ -163,14 +163,14 @@ describe('GET /api/articles',()=>{
                 expect(body.articles).toHaveLength(5)
             })
     })
-    test('accepts a limit query which alters the page length',()=>{
+    test('accepts a p query which alters the page length',()=>{
         return request(app)
             .get('/api/articles?limit=5&sort_by=article_id&p=2&order=asc')
             .expect(200)
             .then(({body})=>{
                 expect(body.articles).toMatchObject(
                     [...Array(5)].map((obj,i)=>{return {article_id:i+6}})
-                    )
+                )
             })
     })
     test('p defaults to first page',()=>{
@@ -180,7 +180,7 @@ describe('GET /api/articles',()=>{
             .then(({body})=>{
                 expect(body.articles).toMatchObject(
                     [...Array(5)].map((obj,i)=>{return {article_id:i+1}})
-                    )
+                )
             })
     })
     test('rejects non number entries for limit and p',()=>{
@@ -240,12 +240,12 @@ describe('GET /api/articles/:article_id',()=>{
 })
 
 describe('GET /api/articles/:article_id/comments',()=>{
-    test('recovers the comments on a given article',()=>{
+    test('recovers the comments on a given article (defaults to length 10',()=>{
         return request(app)
             .get('/api/articles/1/comments')
             .expect(200)
             .then(({body})=>{
-                expect(body.comments).toMatchObject(Array(11).fill({
+                expect(body.comments).toMatchObject(Array(10).fill({
                     comment_id:expect.any(Number),
                     votes:expect.any(Number),
                     created_at:expect.any(String),
@@ -277,6 +277,52 @@ describe('GET /api/articles/:article_id/comments',()=>{
             .expect(200)
             .then(({body})=>{
                 expect(body.comments).toBeSortedBy('created_at',{descending:true})
+            })
+    })
+    test('accepts a limit query adjusting the page length',()=>{
+        return request(app)
+            .get('/api/articles/1/comments?limit=5')
+            .expect(200)
+            .then(({body})=>{
+                expect(body.comments).toHaveLength(5)
+            })
+    })
+    test('accepts a p query which chooses the page',()=>{
+        return request(app)
+            .get('/api/articles/1/comments')
+            .expect(200)
+            .then(({body})=>{
+                return Promise.all([
+                    body.comments,
+                    request(app)
+                        .get('/api/articles/1/comments?limit=2&p=2')
+                ])
+            }).then(([allComments,{body}])=>{
+                expect(body.comments).toEqual(allComments.slice(2,4))
+            })
+    })
+    test('page defaults to 1',()=>{
+        return request(app)
+            .get('/api/articles/1/comments')
+            .expect(200)
+            .then(({body})=>{
+                return Promise.all([
+                    body.comments,
+                    request(app)
+                        .get('/api/articles/1/comments?limit=2')
+                ])
+            }).then(([allComments,{body}])=>{
+                expect(body.comments).toEqual(allComments.slice(0,2))
+            })
+    })
+    test('rejects non numerical values for p and limit',()=>{
+        return request(app)
+            .get('/api/articles/1/comments?limit=garlic')
+            .expect(400)
+            .then(()=>{
+                return request(app)
+                    .get('/api/articles/1/comments?p=garlic')
+                    .expect(400)
             })
     })
 })
