@@ -133,3 +133,13 @@ exports.addTopicToDatabase=({slug,description})=>{
         RETURNING *`,[slug,description])
         .then(({rows})=>rows[0])
 }
+
+exports.removeArticleFromDatabase=({article_id})=>{
+    return db.query(`DELETE FROM comments
+        WHERE article_id=$1`,[article_id])
+        .then(()=>{
+            return db.query(`DELETE FROM articles
+                WHERE article_id=$1
+                RETURNING *`,[article_id])
+        }).then(({rows})=>rows.length?null:Promise.reject({code:404})) 
+}

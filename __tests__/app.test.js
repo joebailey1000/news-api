@@ -781,3 +781,36 @@ describe('POST /api/topics',()=>{
             })
     })
 })
+
+describe.only('DELETE /api/articles/:article_id',()=>{
+    test('deletes an article from the database',()=>{
+        return request(app)
+            .delete('/api/articles/1')
+            .expect(204)
+            .then(()=>{
+                return request(app)
+                    .get('/api/articles/1')
+                    .expect(404)
+            })
+    })
+    test('deletes child comments of the removed article',()=>{
+        return request(app)
+            .delete('/api/articles/1')
+            .expect(204)
+            .then(()=>{
+                return request(app)
+                    .get('/api/articles/1/comments')
+                    .expect(404)
+            })
+    })
+    test('sends 404 if no article is found',()=>{
+        return request(app)
+            .delete('/api/articles/123456')
+            .expect(404)
+    })
+    test('sends 400 if article id is not a number',()=>{
+        return request(app)
+            .delete('/api/articles/garlic')
+            .expect(400)
+    })
+})

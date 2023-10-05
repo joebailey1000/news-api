@@ -10,7 +10,8 @@ const {
     fetchSpecificUser,
     voteOnComment,
     addArticleToDatabase,
-    addTopicToDatabase
+    addTopicToDatabase,
+    removeArticleFromDatabase
 }=require('../models/app.model')
 
 const endpointsList=require('../endpoints.json')
@@ -100,5 +101,12 @@ exports.postTopic=(req,res,next)=>{
     return addTopicToDatabase(req.body)
         .then(posted_topic=>{
             res.status(201).send({posted_topic})
+        }).catch(next)
+}
+
+exports.deleteArticle=(req,res,next)=>{
+    return removeArticleFromDatabase(req.params)
+        .then(()=>{
+            res.sendStatus(204)
         }).catch(next)
 }

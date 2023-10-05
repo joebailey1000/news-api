@@ -5,7 +5,8 @@ const {
     getCommentsByArticle,
     patchArticle,
     postComment,
-    postArticle
+    postArticle,
+    deleteArticle
 }=require('../controllers/app.controller')
 
 articlesRouter
@@ -17,6 +18,7 @@ articlesRouter
     .route('/:article_id')
     .get(getArticleById)
     .patch(patchArticle)
+    .delete(deleteArticle)
 
 
 articlesRouter

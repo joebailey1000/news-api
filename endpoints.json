@@ -77,6 +77,10 @@
       }
     }
   },
+  "DELETE /api/articles/:article_id": {
+    "description": "deletes an article and all its comments from the server database",
+    "queries": []
+  },
   "GET /api/articles/:article_id/comments":{
     "description": "serves a list of all comments on the article with the requested id",
     "queries":[],
