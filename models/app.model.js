@@ -17,7 +17,8 @@ exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc',limit=10,
         !['asc','desc'].includes(order)
     ) return Promise.reject({code:400})
     return db.query(`SELECT articles.article_id,title,topic,articles.author,
-        articles.created_at,articles.votes,article_img_url FROM articles
+        articles.created_at,articles.votes,article_img_url,
+        COUNT(comment_id) AS comment_count FROM articles
         LEFT OUTER JOIN comments ON articles.article_id=comments.article_id
         WHERE topic LIKE $1
         GROUP BY articles.article_id
