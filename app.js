@@ -1,6 +1,9 @@
 const express=require('express')
 const app=express()
 const apiRouter=require('./routers/api-router.js')
+const cors=require('cors')
+
+app.use(cors())
 
 app.use(express.json())
 
