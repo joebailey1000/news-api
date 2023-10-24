@@ -158,5 +158,20 @@
   "DELETE /api/comments/:comment_id":{
     "description": "delete a comment from the server database",
     "queries": []
+  },
+  "PATCH /api/comments/:comment_id":{
+    "description": "change the votes on a comment by inc_votes",
+    "queries": [],
+    "examplePatchRequest":{
+      "inc_votes":3
+    },
+    "exampleResponse":{
+      "comment_id":1,
+      "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      "votes": 16,
+      "author": "butter_bridge",
+      "article_id": 9,
+      "created_at": 1586179020000
+    }
   }
 }
