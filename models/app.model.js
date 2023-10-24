@@ -13,7 +13,8 @@ exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc',limit=10,
         'author',
         'created_at',
         'article_img_url',
-        'comment_count'
+        'comment_count',
+        'votes'
         ].includes(sort_by)||
         !['asc','desc'].includes(order)
     ) return Promise.reject({code:400})
