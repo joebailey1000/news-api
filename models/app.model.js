@@ -5,7 +5,7 @@ exports.fetchAllTopics=()=>{
         .then(({rows})=>rows)
 }
 
-exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc',limit=10,p=1,author='%'})=>{
+exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc',limit=10,p=1})=>{
     if (![
         'article_id',
         'title',
@@ -22,10 +22,10 @@ exports.fetchAllArticles=({topic='%',sort_by='created_at',order='desc',limit=10,
         articles.created_at,articles.votes,article_img_url,
         COUNT(comment_id) AS comment_count FROM articles
         LEFT OUTER JOIN comments ON articles.article_id=comments.article_id
-        WHERE topic LIKE $1 AND author LIKE $2
+        WHERE topic LIKE $1
         GROUP BY articles.article_id
         ORDER BY ${sort_by} ${order}
-        LIMIT $3 OFFSET $4`,[topic,author,limit,(p-1)*limit])
+        LIMIT $2 OFFSET $3`,[topic,limit,(p-1)*limit])
         .then(({rows})=>rows.length?rows:Promise.reject({code:404}))
 }
 

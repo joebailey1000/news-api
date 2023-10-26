@@ -14,7 +14,6 @@ app.get('*',(req,res)=>{
 })
 
 app.use((err,req,res,next)=>{
-    console.log(err)
     if (err.status===400)res.status(400).send({msg:`Could not parse argument containing '%' (incorrect URL formatting).`})
     switch(err.code){
         case 404: res.status(404).send({msg:'Not found.'})
@@ -23,7 +22,9 @@ app.use((err,req,res,next)=>{
         case '23503':
         case '22P02':
         case '08P01': res.status(400).send({msg:'Bad request.'})
-        default:res.sendStatus(500)
+        default:
+          console.log(err)
+          res.sendStatus(500)
     }
 })
 
