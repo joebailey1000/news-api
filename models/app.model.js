@@ -147,9 +147,9 @@ exports.removeArticleFromDatabase=({article_id})=>{
         }).then(({rows})=>rows.length?null:Promise.reject({code:404})) 
 }
 
-exports.fetchArticlesByUsername=({username})=>{
+exports.fetchArticlesByUsername=({username},{limit=10,p=1})=>{
   return exports.fetchSpecificUser({username})
     .then(()=>db.query(`SELECT * FROM articles
-    WHERE author=$1`,[username]))
+    WHERE author=$1 LIMIT $2 OFFSET $3`,[username,limit,(p-1)*limit]))
     .then(({rows})=>rows)
 }

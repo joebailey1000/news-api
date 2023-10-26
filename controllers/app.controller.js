@@ -113,7 +113,7 @@ exports.deleteArticle = (req, res, next) => {
 }
 
 exports.getArticlesByUsername = (req, res, next) => {
-  return fetchArticlesByUsername(req.params)
+  return fetchArticlesByUsername(req.params,req.query)
     .then((articles)=>{
       res.status(200).send({articles})
     }).catch(next)

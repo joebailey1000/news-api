@@ -839,4 +839,20 @@ describe('GET /api/users/articles', () => {
       .get('/api/users/gamer/articles')
       .expect(404)
   })
+  test('takes limit and p queries',()=>{
+    return request(app)
+      .get('/api/users/butter_bridge/articles?limit=2&p=2')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toMatchObject(Array(2).fill({
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: "butter_bridge",
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url:expect.any(String)
+        }))
+      })
+  })
 })
