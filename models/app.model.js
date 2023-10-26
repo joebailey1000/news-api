@@ -146,3 +146,10 @@ exports.removeArticleFromDatabase=({article_id})=>{
                 RETURNING *`,[article_id])
         }).then(({rows})=>rows.length?null:Promise.reject({code:404})) 
 }
+
+exports.fetchArticlesByUsername=({username})=>{
+  return exports.fetchSpecificUser({username})
+    .then(()=>db.query(`SELECT * FROM articles
+    WHERE author=$1`,[username]))
+    .then(({rows})=>rows)
+}
