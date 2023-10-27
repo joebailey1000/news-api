@@ -8,7 +8,8 @@ const {
     getUserByUsername,
     patchComment,
     postTopic,
-    getArticlesByUsername
+    getArticlesByUsername,
+    getCommentsByUsername
 }=require('../controllers/app.controller')
 
 apiRouter.get('/',getApi)
@@ -26,6 +27,8 @@ apiRouter.get('/users',getAllUsers)
 apiRouter.get('/users/:username',getUserByUsername)
 
 apiRouter.get('/users/:username/articles',getArticlesByUsername)
+
+apiRouter.get('/users/:username/comments',getCommentsByUsername)
 
 apiRouter
     .route('/comments/:comment_id')

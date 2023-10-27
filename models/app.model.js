@@ -153,3 +153,10 @@ exports.fetchArticlesByUsername=({username},{limit=10,p=1})=>{
     WHERE author=$1 LIMIT $2 OFFSET $3`,[username,limit,(p-1)*limit]))
     .then(({rows})=>rows)
 }
+
+exports.fetchCommentsByUsername=({username},{limit=10,p=1})=>{
+  return exports.fetchSpecificUser({username})
+    .then(()=>db.query(`SELECT * FROM comments
+    WHERE author=$1 LIMIT $2 OFFSET $3`,[username,limit,(p-1)*limit]))
+    .then(({rows})=>rows)
+}

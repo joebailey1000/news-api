@@ -12,7 +12,8 @@ const {
   addArticleToDatabase,
   addTopicToDatabase,
   removeArticleFromDatabase,
-  fetchArticlesByUsername
+  fetchArticlesByUsername,
+  fetchCommentsByUsername
 } = require('../models/app.model')
 
 const endpointsList = require('../endpoints.json')
@@ -116,5 +117,12 @@ exports.getArticlesByUsername = (req, res, next) => {
   return fetchArticlesByUsername(req.params,req.query)
     .then((articles)=>{
       res.status(200).send({articles})
+    }).catch(next)
+}
+
+exports.getCommentsByUsername = (req,res,next) =>{
+  return fetchCommentsByUsername(req.params,req.query)
+    .then((comments)=>{
+      res.status(200).send({comments})
     }).catch(next)
 }

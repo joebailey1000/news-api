@@ -817,7 +817,7 @@ describe('DELETE /api/articles/:article_id', () => {
   })
 })
 
-describe('GET /api/users/articles', () => {
+describe('GET /api/users/:username/articles', () => {
   test('recovers the articles authored by the given user', () => {
     return request(app)
       .get('/api/users/butter_bridge/articles')
@@ -852,6 +852,43 @@ describe('GET /api/users/articles', () => {
           created_at: expect.any(String),
           votes: expect.any(Number),
           article_img_url:expect.any(String)
+        }))
+      })
+  })
+})
+
+describe('GET /api/users/:username/comments', () => {
+  test('recovers the comments authored by the given user', () => {
+    return request(app)
+      .get('/api/users/butter_bridge/comments')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toMatchObject(Array(5).fill({
+          article_id: expect.any(Number),
+          author: "butter_bridge",
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        }))
+      })
+  })
+  test('returns 404 when user does not exist',()=>{
+    return request(app)
+      .get('/api/users/gamer/articles')
+      .expect(404)
+  })
+  test('takes limit and p queries',()=>{
+    return request(app)
+      .get('/api/users/butter_bridge/comments?limit=2&p=2')
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body)
+        expect(body.comments).toMatchObject(Array(2).fill({
+          author: "butter_bridge",
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_id:expect.any(Number)
         }))
       })
   })
